@@ -1,27 +1,34 @@
-'use strict';
-
-import * as winston from 'winston';
-import * as path from 'path';
-import * as nconf from 'nconf';
+import winston from 'winston';
+import path from 'path';
+import nconf from 'nconf';
 
 import { install as webInstall } from '../../install/web';
 import { paths } from '../constants';
-import * as localInstall from '../install';
-import * as build from '../meta/build';
-import * as prestart from '../prestart';
-import * as pkg from '../../package.json';
+import install from '../install';
+import build from '../meta/build';
+import prestart from '../prestart';
+import pkg from '../../package.json';
 
-async function setup(initConfig: any) {
+interface Data {
+    username: string;
+    password: string;
+}
+
+async function setup(initConfig: Data) {
     winston.info('NodeBB Setup Triggered via Command Line');
 
     console.log(`\nWelcome to NodeBB v${pkg.version}!`);
     console.log('\nThis looks like a new installation, so you\'ll have to answer a few questions about your environment before we can proceed.');
     console.log('Press enter to accept the default setting (shown in brackets).');
 
-    localInstall.values = initConfig;
-    const data = await localInstall.setup();
-    let configFile = paths.config;
+    install.values = initConfig;
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    const data: Data = await install.setup();
+    let configFile: string = paths.config;
     if (nconf.get('config')) {
+        // The next line calls a function in a module that has not been updated to TS yet
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         configFile = path.resolve(paths.baseDir, nconf.get('config'));
     }
 
@@ -39,10 +46,10 @@ async function setup(initConfig: any) {
     }
     console.log(`\n${separator}\n`);
 
-    if (data.hasOwnProperty('password')) {
+    if ('password' in data) {
         console.log('An administrative user was automatically created for you:');
-        console.log(`    Username: ${data.username}`);
-        console.log(`    Password: ${data.password}`);
+        console.log(`    Username: ${(data as {username:string, password:string}).username}`);
+        console.log(`    Password: ${(data as {username:string, password:string}).password}`);
         console.log('');
     }
     console.log('NodeBB Setup Completed. Run "./nodebb start" to manually start your NodeBB server.');
