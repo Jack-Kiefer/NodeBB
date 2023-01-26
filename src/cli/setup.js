@@ -30,13 +30,9 @@ function setup(initConfig) {
         console.log('\nThis looks like a new installation, so you\'ll have to answer a few questions about your environment before we can proceed.');
         console.log('Press enter to accept the default setting (shown in brackets).');
         install_1.default.values = initConfig;
-        // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         const data = yield install_1.default.setup();
         let configFile = constants_1.paths.config;
         if (nconf_1.default.get('config')) {
-            // The next line calls a function in a module that has not been updated to TS yet
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
             configFile = path_1.default.resolve(constants_1.paths.baseDir, nconf_1.default.get('config'));
         }
         prestart_1.default.loadConfig(configFile);

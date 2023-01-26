@@ -22,14 +22,10 @@ async function setup(initConfig: Data) {
     console.log('Press enter to accept the default setting (shown in brackets).');
 
     install.values = initConfig;
-    // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-    const data: Data = await install.setup();
-    let configFile: string = paths.config;
+    const data: Data = await install.setup() as Data;
+    let configFile : string = paths.config;
     if (nconf.get('config')) {
-        // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        configFile = path.resolve(paths.baseDir, nconf.get('config'));
+        configFile = path.resolve(paths.baseDir, nconf.get('config') as string);
     }
 
     prestart.loadConfig(configFile);
